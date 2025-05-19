@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Phone, Mail, Clock, MapPin } from 'lucide-react';
+import emailjs from '@emailjs/browser';
 
 const ContactCard = ({ icon, title, content, link, linkText }: { icon: React.ReactNode, title: string, content: string, link?: string, linkText?: string }) => (
   <div className="bg-white p-6 rounded-xl shadow-md transition-all duration-300 hover:shadow-lg">
@@ -25,6 +26,34 @@ const ContactCard = ({ icon, title, content, link, linkText }: { icon: React.Rea
 );
 
 const Contact = () => {
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitStatus, setSubmitStatus] = useState<'idle' | 'success' | 'error'>('idle');
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+    setSubmitStatus('idle');
+
+    const form = e.currentTarget;
+    
+    try {
+      await emailjs.sendForm(
+        'YOUR_SERVICE_ID', // Replace with your EmailJS service ID
+        'YOUR_TEMPLATE_ID', // Replace with your EmailJS template ID
+        form,
+        'YOUR_PUBLIC_KEY' // Replace with your EmailJS public key
+      );
+      
+      setSubmitStatus('success');
+      form.reset();
+    } catch (error) {
+      console.error('Error sending email:', error);
+      setSubmitStatus('error');
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
   return (
     <section id="contact" className="py-16 bg-gradient-to-b from-white to-gray-100">
       <div className="container mx-auto px-4 md:px-6">
@@ -37,7 +66,7 @@ const Contact = () => {
         
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
           <div>
-            <form className="bg-white p-8 rounded-xl shadow-md">
+            <form onSubmit={handleSubmit} className="bg-white p-8 rounded-xl shadow-md">
               <h3 className="text-2xl font-bold text-gray-900 mb-6">Get Your Free Estimate</h3>
               
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
@@ -45,7 +74,9 @@ const Contact = () => {
                   <label htmlFor="name" className="block text-gray-700 font-medium mb-2">Name</label>
                   <input 
                     type="text" 
+                    name="name"
                     id="name" 
+                    required
                     className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                     placeholder="Your Name"
                   />
@@ -54,7 +85,9 @@ const Contact = () => {
                   <label htmlFor="email" className="block text-gray-700 font-medium mb-2">Email</label>
                   <input 
                     type="email" 
+                    name="email"
                     id="email" 
+                    required
                     className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                     placeholder="email@example.com"
                   />
@@ -66,7 +99,9 @@ const Contact = () => {
                   <label htmlFor="phone" className="block text-gray-700 font-medium mb-2">Phone</label>
                   <input 
                     type="tel" 
+                    name="phone"
                     id="phone" 
+                    required
                     className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                     placeholder="571-752-8200"
                   />
@@ -75,6 +110,8 @@ const Contact = () => {
                   <label htmlFor="service" className="block text-gray-700 font-medium mb-2">Service Type</label>
                   <select 
                     id="service"
+                    name="service"
+                    required
                     className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   >
                     <option value="">Select a Service</option>
@@ -90,7 +127,9 @@ const Contact = () => {
                 <label htmlFor="message" className="block text-gray-700 font-medium mb-2">Message</label>
                 <textarea 
                   id="message" 
+                  name="message"
                   rows={4} 
+                  required
                   className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   placeholder="Tell us about your needs..."
                 ></textarea>
@@ -98,10 +137,20 @@ const Contact = () => {
               
               <button 
                 type="submit" 
-                className="bg-blue-600 text-white font-bold px-6 py-3 rounded-lg w-full transition-colors hover:bg-blue-700"
+                disabled={isSubmitting}
+                className={`bg-blue-600 text-white font-bold px-6 py-3 rounded-lg w-full transition-all ${
+                  isSubmitting ? 'opacity-75 cursor-not-allowed' : 'hover:bg-blue-700'
+                }`}
               >
-                Submit Request
+                {isSubmitting ? 'Sending...' : 'Submit Request'}
               </button>
+
+              {submitStatus === 'success' && (
+                <p className="mt-4 text-green-600 text-center">Thank you! We'll get back to you soon.</p>
+              )}
+              {submitStatus === 'error' && (
+                <p className="mt-4 text-red-600 text-center">Something went wrong. Please try again later.</p>
+              )}
             </form>
           </div>
           
