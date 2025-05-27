@@ -13,11 +13,21 @@ const FeatureCard = ({ icon, title, description }: { icon: React.ReactNode, titl
 
 const WhyChooseUs = () => {
   return (
-    <section id="why-choose-us" className="py-16 bg-gray-50">
-      <div className="container mx-auto px-4 md:px-6">
+    <section id="why-choose-us" className="py-16 bg-gray-50 relative">
+      <div 
+        className="absolute inset-0 bg-black opacity-40"
+        style={{
+          backgroundImage: "url('https://postimg.cc/dhMT3C0Q')",
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+          backgroundBlendMode: 'overlay',
+          mixBlendMode: 'multiply'
+        }}
+      ></div>
+      <div className="container mx-auto px-4 md:px-6 relative z-10">
         <div className="text-center mb-12">
-          <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">Why Choose Us</h2>
-          <p className="text-xl text-gray-600 max-w-2xl mx-auto">
+          <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">Why Choose Us</h2>
+          <p className="text-xl text-blue-100 max-w-2xl mx-auto">
             We bring professionalism, quality, and reliability to every job
           </p>
         </div>
