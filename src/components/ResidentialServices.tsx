@@ -19,7 +19,7 @@ const ResidentialServices = () => {
       <div 
         className="absolute inset-0 bg-black opacity-40"
         style={{
-          backgroundImage: "url('https://i.postimg.cc/8Fh3TmMY/div-element.jpg')",
+          backgroundImage: "url('https://postimg.cc/dhMT3C0Q')",
           backgroundSize: 'cover',
           backgroundPosition: 'center',
           backgroundBlendMode: 'overlay',
