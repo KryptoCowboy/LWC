@@ -2,7 +2,12 @@ import React from 'react';
 import { Home, Droplet, Shield, Building, Sun } from 'lucide-react';
 
 const ServiceCard = ({ icon, title, description }: { icon: React.ReactNode, title: string, description: string }) => (
-  <div className="bg-white p-6 rounded-xl shadow-md transition-all duration-300 hover:shadow-lg hover:translate-y-[-5px]">
+  <div className="bg-white p-6 rounded-xl shadow-md transition-all duration-300 hover:shadow-lg hover:translate-y-[-5px]" style={{
+    backgroundImage: "url('https://postimg.cc/dhMT3C0Q')",
+    backgroundSize: 'cover',
+    backgroundPosition: 'center',
+    backgroundBlendMode: 'overlay',
+  }}>
     <div className="flex items-center mb-4">
       <div className="mr-4 bg-blue-100 p-3 rounded-full text-blue-600">
         {icon}
